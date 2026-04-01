@@ -9,7 +9,7 @@ defineEmits<{ reset: [] }>()
   <div class="meme">
     <div class="text-block text-top">Где {{ data.thing }}, {{ data.person }}?</div>
     <img src="/map.png" class="meme-img" alt="" />
-    <div class="text-block text-bottom">Нам нужна {{ data.thing }}!</div>
+    <div class="text-block text-bottom">Нам {{ data.need }} {{ data.thing }}!</div>
   </div>
   <button class="reset-btn" @click="$emit('reset')">Сбросить</button>
 </template>

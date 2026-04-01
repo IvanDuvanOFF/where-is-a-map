@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick } from 'vue'
-import type { MemeData } from '../types'
+import type { MemeData, NeedForm } from '../types'
 
 const emit = defineEmits<{
   submit: [data: MemeData]
@@ -8,8 +8,11 @@ const emit = defineEmits<{
 
 const thing  = ref('')
 const person = ref('')
+const need   = ref<NeedForm>('нужна')
 const inputThingRef  = ref<HTMLInputElement | null>(null)
 const inputPersonRef = ref<HTMLInputElement | null>(null)
+
+const needOptions: NeedForm[] = ['нужен', 'нужна', 'нужно', 'нужны']
 
 onMounted(async () => {
   await nextTick()
@@ -21,7 +24,7 @@ function handleSubmit() {
   const t = thing.value.trim()
   const p = person.value.trim()
   if (!t || !p) return
-  emit('submit', { thing: t, person: p })
+  emit('submit', { thing: t, person: p, need: need.value })
 }
 </script>
 
@@ -44,6 +47,20 @@ function handleSubmit() {
               autocomplete="off"
             />
           </div>
+          <div class="field">
+            <label>Нам...</label>
+            <div class="need-group">
+              <button
+                v-for="opt in needOptions"
+                :key="opt"
+                type="button"
+                class="need-btn"
+                :class="{ active: need === opt }"
+                @click="need = opt"
+              >{{ opt }}</button>
+            </div>
+          </div>
+
           <div class="field">
             <label for="input-person">У кого?</label>
             <input
@@ -155,5 +172,34 @@ input::placeholder {
 
 .submit-btn:active {
   transform: scale(0.97);
+}
+
+.need-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.need-btn {
+  flex: 1;
+  padding: 0.5rem 0.25rem;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 6px;
+  color: #aaa;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  font-family: sans-serif;
+}
+
+.need-btn:hover {
+  border-color: #888;
+  color: #fff;
+}
+
+.need-btn.active {
+  border-color: #e8c42a;
+  color: #e8c42a;
+  background: #2e2a14;
 }
 </style>
